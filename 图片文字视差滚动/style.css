@@ -1,0 +1,91 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    overflow: hidden;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    /* 使用CSS 3d属性实现 */
+    /* 透镜：距离多远看子元素 */
+    perspective: 100px;
+    /* 默认flat，3d视线效果用 preserve-3d */
+    transform-style: preserve-3d;
+    overflow-y: auto;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.list-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 45vh;
+    overflow: hidden;
+}
+
+.list-item:hover .item-image::before {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.item-image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /* 让文字在上 */
+    z-index: -1;
+    /* 负责放大图片，并且让图片向后移动，形成视差： */
+    transform: translateZ(-50px) scale(2.4);
+}
+
+.item-image::before {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    /* 延迟属性的改变，针对鼠标悬浮蒙版变亮的效果 */
+    transition: all 0.3s ease;
+}
+
+.item-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    /* 使图片不变形 */
+    object-fit: cover;
+}
+
+.item-text {
+    color: #ffffff;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+}
+
+.text-title {
+    font-size: 2rem;
+    font-weight: bolder;
+    margin-bottom: 20px;
+}
+
+.text-desc {
+    font-size: 1.2rem;
+}

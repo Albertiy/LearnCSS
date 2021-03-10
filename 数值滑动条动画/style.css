@@ -1,0 +1,118 @@
+* {
+    padding: 0;
+    margin: 0;
+    /* 定义了user agent应该如何计算一个元素的总宽度和总高度
+    在CSS盒子模型的默认定义里，设置的width和height只应用到内容区，
+    如果这个元素有任何border或者padding，绘制到屏幕上的宽高都会加上设置的边框和内边距值。
+    box-sizing可以用来调节这个表现：
+    content-box默认值，border-box 告诉浏览器：边框和内边距包含在设置的width中。
+    注意：border-box不包含margin。
+    */
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+html,
+body {
+    display: grid;
+    height: 100%;
+    text-align: center;
+    place-items: center;
+    background: #664AFF;
+}
+
+.range {
+    height: 80px;
+    width: 380px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 0 65px 0 45px;
+}
+
+.range .sliderValue {
+    position: relative;
+    width: 100%;
+}
+
+.range .sliderValue span {
+    position: absolute;
+    height: 45px;
+    width: 45px;
+    color: #fff;
+    font-weight: 500;
+    top: -40px;
+    transform: translateX(-50%) scale(0);
+    transform-origin: bottom;
+    transition: transform 0.3s ease-in-out;
+    line-height: 55px;
+    z-index: 2;
+}
+
+.range .sliderValue span.show {
+    transform: translateX(-50%) scale(1);
+}
+
+.range .sliderValue span:after {
+    position: absolute;
+    content: '';
+    height: 45px;
+    width: 45px;
+    background: #664AFF;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    z-index: -1;
+    border: 3px solid #fff;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+}
+
+.range .field {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.range .field .value {
+    position: absolute;
+    font-size: 18px;
+    font-weight: 600;
+    color: #664AFF;
+}
+
+.range .field .value.left {
+    left: -22px;
+}
+
+.range .field .value.right {
+    right: -44px;
+}
+
+/* 滑动条条带 */
+.range .field input {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 3px;
+    width: 100%;
+    background: #ddd;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+}
+
+/* 滑动条按钮 */
+.range .field input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    background: #664AFF;
+    border-radius: 50%;
+    border: 1px solid #664AFF;
+    cursor: pointer;
+}
+
+.range .field input::-moz-range-progress {
+    background: #664AFF;
+}

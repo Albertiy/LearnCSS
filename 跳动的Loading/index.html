@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>跳动的Loading</title>
+  </head>
+  <body>
+    <div class="container">
+      <span style="--i: 0">L</span>
+      <span style="--i: 1">o</span>
+      <span style="--i: 2">a</span>
+      <span style="--i: 3">d</span>
+      <span style="--i: 4">i</span>
+      <span style="--i: 5">n</span>
+      <span style="--i: 6">g</span>
+      <!-- <span>&nbsp;</span> -->
+      <span style="--i: 7">.</span>
+      <span style="--i: 8">.</span>
+      <span style="--i: 9">.</span>
+    </div>
+    <style>
+      :root {
+        --fsize: 4rem;
+        --adura: 5s;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: #010b10;
+      }
+
+      .container {
+        display: flex;
+        align-items: center;
+        height: calc(var(--fsize) * 2);
+        font-family: "等距更纱黑体 SC", Georgia, "Times New Roman", Times, serif;
+        font-size: var(--fsize);
+        color: white;
+        counter-reset: charspan -1;
+      }
+
+      .container span {
+        counter-increment: charspan;
+        display: inline-block;
+        animation: jumpWord var(--adura) ease-out calc(var(--i) * var(--adura) / 12) infinite;
+      }
+
+      /* 使用计数器作为CSS属性数字值的尝试失败了 */
+      /* .container span::before {
+        content: counter(charspan)'s';
+        position: relative;
+        font-size: 2rem;
+        color: wheat;
+      } */
+
+      @keyframes jumpWord {
+        0% {
+          padding: 0;
+        }
+        12% {
+          /* padding: 0.5rem; */
+          padding-bottom: 4rem;
+        }
+        24% {
+          padding: 0;
+        }
+      }
+    </style>
+  </body>
+</html>

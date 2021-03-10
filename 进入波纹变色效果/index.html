@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>进入波纹变色效果</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>TopWeb</h1>
+      <form>
+        <input type="text" class="tbx" placeholder="姓名" />
+        <input type="password" class="tbx" placeholder="密码" />
+        <input type="submit" class="sub" value="提交" />
+      </form>
+    </div>
+    <script>
+      const con = document.querySelector(".container");
+      let isInside = false; // 当前鼠标是否在元素内
+      let isIn = true;
+      let isOut = false;
+      let isRemoving = false; // 当前有正在等待移除元素
+      var span;
+      // 生成元素位置在进入点距离窗口距离减去父盒子距离窗口距离
+      con.addEventListener("mouseenter", (e) => {
+        if (isIn) {
+          let inx = e.clientX - e.target.offsetLeft;
+          let iny = e.clientY - e.target.offsetTop;
+
+          let el = document.createElement("span");
+          el.style.left = inx + "px";
+          el.style.top = iny + "px";
+          con.appendChild(el);
+
+          span = document.querySelector(".container span");
+          span.classList.remove("out");
+          span.classList.add("in");
+
+          isIn = false;
+          isOut = true;
+        }
+      });
+      con.addEventListener("mouseleave", (e) => {
+        if (isOut) {
+          let inx = e.clientX - e.target.offsetLeft;
+          let iny = e.clientY - e.target.offsetTop;
+
+          span = document.querySelector(".container span");
+          span.classList.remove("in");
+          span.classList.add("out");
+          span.style.left = inx + "px";
+          span.style.top = iny + "px";
+
+          isOut = false;
+
+          setTimeout(() => {
+            if (span) con.removeChild(span);
+            isIn = true;
+          }, 250);
+        }
+      });
+    </script>
+  </body>
+</html>

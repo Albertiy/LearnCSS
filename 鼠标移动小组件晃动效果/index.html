@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>晃动的小组件</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <section>
+      <img id="s1" src="./倒三角形.svg" data-speed="-5" class="layer" />
+      <img id="s2" src="./三角形.svg" data-speed="5" class="layer" />
+      <img id="s3" src="./五角星.svg" data-speed="2" class="layer" />
+      <img id="s4" src="./圆形.svg" data-speed="6" class="layer" />
+      <img id="s5" src="./圆角矩形.svg" data-speed="8" class="layer" />
+      <img id="s6" src="./棱形.svg" data-speed="-2" class="layer" />
+      <img id="s7" src="./正五边形.svg" data-speed="4" class="layer" />
+      <img id="s8" src="./正六边形.svg" data-speed="-9" class="layer" />
+      <img id="s9" src="./红交叉.svg" data-speed="6" class="layer" />
+      <img id="s10" src="./绿交叉.svg" data-speed="-7" class="layer" />
+      <img id="s11" src="./绿闪电.svg" data-speed="-5" class="layer" />
+      <img id="s12" src="./蓝闪电.svg" data-speed="5" class="layer" />
+      <h2 class="layer" data-speed="2">Parallax</h2>
+    </section>
+    <script type="text/javascript">
+      document.addEventListener("mousemove", parallax);
+      function parallax(e) {
+        this.querySelectorAll(".layer").forEach((layer) => {
+          const speed = layer.getAttribute("data-speed");
+          const x = (window.innerWidth - e.pageX * speed) / 100;
+          const y = (window.innerHeight - e.pageY * speed) / 100;
+          layer.style.transform = `translateX(${x}px) translateY(${y}px)`;
+        });
+      }
+    </script>
+  </body>
+</html>

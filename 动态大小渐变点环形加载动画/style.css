@@ -1,0 +1,249 @@
+:root {
+  --bgcolor: rgb(50, 55, 71);
+  --dotcolor: rgb(134, 255, 215);
+  --anim-duration: 1.5s;
+  --anim-maxdelay: 3s;
+  --animbg-duration: 4.5s;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bgcolor, rgb(50, 55, 71));
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  width: 10rem;
+  height: 10rem;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  animation: animateBg var(--animbg-duration) linear infinite;
+}
+
+.content span {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2rem;
+  height: 100%;
+  /**改进：使用CSS变量设置旋转值 */
+  transform: translateX(-50%) rotate(calc(var(--i) * 18deg));
+}
+
+.content span::after {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background-color: var(--dotcolor, rgb(68, 249, 255));
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  /**改进：多层阴影 */
+  box-shadow: 0px 0px 12px rgb(174, 250, 255),
+    0px 0px 24px rgb(174, 250, 255),
+    0px 0px 36px rgb(174, 250, 255);
+  /* 若动画的播放时长小于最大动画延迟，可以做出写轮眼的效果；
+     例如动画时长为最大动画延迟的1/3，就能看到三组同时旋转的点；
+     如果动画时长为1/2最大动画延迟，就是两组相对旋转的点； 
+   */
+  animation: scaleDot var(--anim-duration, 1.5s) ease-out infinite normal backwards;
+  /**改进：通过CSS变量设置动画延迟*/
+  animation-delay: calc(var(--anim-maxdelay) * (var(--i) / 20 - 1));
+}
+
+/**说明：通过旋转伪元素点的span设置点均匀分布在圆圈上 */
+/* .content span:nth-child(1) {
+  transform: translateX(-50%) rotate(calc(1 * 18deg));
+}
+
+.content span:nth-child(2) {
+  transform: translateX(-50%) rotate(calc(2 * 18deg));
+}
+
+.content span:nth-child(3) {
+  transform: translateX(-50%) rotate(calc(3 * 18deg));
+}
+
+.content span:nth-child(4) {
+  transform: translateX(-50%) rotate(calc(4 * 18deg));
+}
+
+.content span:nth-child(5) {
+  transform: translateX(-50%) rotate(calc(5 * 18deg));
+}
+
+.content span:nth-child(6) {
+  transform: translateX(-50%) rotate(calc(6 * 18deg));
+}
+
+.content span:nth-child(7) {
+  transform: translateX(-50%) rotate(calc(7 * 18deg));
+}
+
+.content span:nth-child(8) {
+  transform: translateX(-50%) rotate(calc(8 * 18deg));
+}
+
+.content span:nth-child(9) {
+  transform: translateX(-50%) rotate(calc(9 * 18deg));
+}
+
+.content span:nth-child(10) {
+  transform: translateX(-50%) rotate(calc(10 * 18deg));
+}
+
+.content span:nth-child(11) {
+  transform: translateX(-50%) rotate(calc(11 * 18deg));
+}
+
+.content span:nth-child(12) {
+  transform: translateX(-50%) rotate(calc(12 * 18deg));
+}
+
+.content span:nth-child(13) {
+  transform: translateX(-50%) rotate(calc(13 * 18deg));
+}
+
+.content span:nth-child(14) {
+  transform: translateX(-50%) rotate(calc(14 * 18deg));
+}
+
+.content span:nth-child(15) {
+  transform: translateX(-50%) rotate(calc(15 * 18deg));
+}
+
+.content span:nth-child(16) {
+  transform: translateX(-50%) rotate(calc(16 * 18deg));
+}
+
+.content span:nth-child(17) {
+  transform: translateX(-50%) rotate(calc(17 * 18deg));
+}
+
+.content span:nth-child(18) {
+  transform: translateX(-50%) rotate(calc(18 * 18deg));
+}
+
+.content span:nth-child(19) {
+  transform: translateX(-50%) rotate(calc(19 * 18deg));
+} */
+
+/**说明：每个点应用放大缩小动画的延迟
+   点为顺时针分部，延迟从小到大，可实现顺时针旋转效果
+   延迟为负数，跳过开始时的动画
+*/
+/*.content span:nth-child(1)::after {
+  animation-delay: calc(1.5s * (1 / 20 - 1));
+}
+
+.content span:nth-child(2)::after {
+  animation-delay: calc(1.5s * (2 / 20 - 1));
+}
+
+.content span:nth-child(3)::after {
+  animation-delay: calc(1.5s * (3 / 20 - 1));
+}
+
+.content span:nth-child(4)::after {
+  animation-delay: calc(1.5s * (4 / 20 - 1));
+}
+
+.content span:nth-child(5)::after {
+  animation-delay: calc(1.5s * (5 / 20 - 1));
+}
+
+.content span:nth-child(6)::after {
+  animation-delay: calc(1.5s * (6 / 20 - 1));
+}
+
+.content span:nth-child(7)::after {
+  animation-delay: calc(1.5s * (7 / 20 - 1));
+}
+
+.content span:nth-child(8)::after {
+  animation-delay: calc(1.5s * (8 / 20 - 1));
+}
+
+.content span:nth-child(9)::after {
+  animation-delay: calc(1.5s * (9 / 20 - 1));
+}
+
+.content span:nth-child(10)::after {
+  animation-delay: calc(1.5s * (10 / 20 - 1));
+}
+
+.content span:nth-child(11)::after {
+  animation-delay: calc(1.5s * (11 / 20 - 1));
+}
+
+.content span:nth-child(12)::after {
+  animation-delay: calc(1.5s * (12 / 20 - 1));
+}
+
+.content span:nth-child(13)::after {
+  animation-delay: calc(1.5s * (13 / 20 - 1));
+}
+
+.content span:nth-child(14)::after {
+  animation-delay: calc(1.5s * (14 / 20 - 1));
+}
+
+.content span:nth-child(15)::after {
+  animation-delay: calc(1.5s * (15 / 20 - 1));
+}
+
+.content span:nth-child(16)::after {
+  animation-delay: calc(1.5s * (16 / 20 - 1));
+}
+
+.content span:nth-child(17)::after {
+  animation-delay: calc(1.5s * (17 / 20 - 1));
+}
+
+.content span:nth-child(18)::after {
+  animation-delay: calc(1.5s * (18 / 20 - 1));
+}
+
+.content span:nth-child(19)::after {
+  animation-delay: calc(1.5s * (19 / 20 - 1));
+}*/
+
+/**说明：放大缩小动画，通过提前scale(0)设置隐藏部分点 */
+@keyframes scaleDot {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    /* 注释掉的是每个点单独变色 */
+    filter: hue-rotate(-360deg);
+  }
+
+  100% {
+    /* scale(0)会在缩放时导致奇怪的不同步问题，
+       解决方法是用透明度0 */
+    transform: scale(0.1);
+    opacity: 0;
+    filter: hue-rotate(360deg);
+  }
+}
+
+/**说明：全部点同步变色动画 */
+@keyframes animateBg {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="loading">
+        <div class="bar"></div>
+      </div>
+      <div style="user-select: none">&nbsp;</div>
+      <div class="loading2">
+        <div class="bar2"></div>
+      </div>
+    </div>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .loading {
+        width: 20rem;
+        height: 4rem;
+        border: 0.5rem solid rgb(0, 72, 206);
+        padding: 5px;
+      }
+
+      .bar {
+        width: 50%;
+        height: 100%;
+        background-color: rgb(0, 72, 206);
+        margin-left: 0;
+        animation: bar-grow 2.5s linear 0s normal forwards infinite;
+      }
+
+      @keyframes bar-grow {
+        from {
+          width: 0;
+        }
+        to {
+          width: 100%;
+        }
+      }
+
+      .loading2 {
+        width: 20rem;
+        height: 4rem;
+        border: 0.5rem solid rgb(206, 0, 113);
+        padding: 5px;
+      }
+
+      .bar2 {
+        width: 0;
+        height: 100%;
+        background-color: rgb(206, 0, 113);
+        margin-left: 0;
+        transition: width 2.5s linear;
+      }
+
+      .loading2:hover .bar2 {
+        width: 100%;
+      }
+    </style>
+  </body>
+</html>

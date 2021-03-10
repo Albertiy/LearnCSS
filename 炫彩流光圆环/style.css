@@ -1,0 +1,120 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    /* top: 50%; */
+    /* transform: translate(0, -50%); */
+    /* 均匀分列 */
+    flex: 1;
+    width: 200px;
+    height: 200px;
+}
+
+/* 
+border无法实现渐变色中空圆环：
+    1. border-background 无法设置渐变色； 
+    2. border-image 可渐变，但导致radius无效；
+只能用中间放个背景色伪元素或子元素的套路了。
+*/
+.circle {
+    background: linear-gradient(to right bottom, #463fc5, #b338ec 30%, #eb36a5 60%, #eb3636 100%);
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    transform: rotate(0);
+    animation: animate 1.5s linear infinite;
+}
+
+/* after在上层 */
+.circle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 65%;
+    height: 65%;
+    border-radius: 50%;
+    background-color: black;
+    transition-duration: 0.2s;
+    rotate: 0;
+}
+
+/* 伪元素hover方法 */
+.circle:hover::after {
+    width: 70%;
+    height: 70%;
+}
+
+/* before在下层 */
+.circle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(to right bottom, #463fc5, #b338ec 30%, #eb36a5 60%, #eb3636 100%);
+    filter: blur(35px);
+
+}
+
+@keyframes animate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(180deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.text {
+    position: absolute;
+    z-index: 1;
+    color: white;
+    text-transform: uppercase;
+    -webkit-user-select: none;
+    user-select: none;
+    transition-duration: 0.2s;
+}
+
+.text:hover {
+    font-size: large;
+}
+
+#c2 {
+    background: linear-gradient(to right bottom, #6ac53f, #7cfff8 30%, #293ad6 60%, #d600d6 100%);
+}
+
+#c2.circle::before {
+    background: linear-gradient(to right bottom, #6ac53f, #7cfff8 30%, #293ad6 60%, #d600d6 100%);
+}
+
+#c3 {
+    background: linear-gradient(to right bottom, #c53fa4, #ff810c 30%, #d9e717 60%, #4fced3 100%);
+}
+
+#c3.circle::before {
+    background: linear-gradient(to right bottom, #c53fa4, #ff810c 30%, #d9e717 60%, #4fced3 100%);
+}

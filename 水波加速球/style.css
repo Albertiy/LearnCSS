@@ -1,0 +1,65 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100vh;
+    background: linear-gradient(rgb(79, 167, 255) 10%, rgb(7, 7, 182));
+}
+
+.main,
+.wave {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.main {
+    border: 3px solid darkturquoise;
+    padding: 10px;
+}
+
+.wave {
+    background: darkturquoise;
+    overflow: hidden;
+}
+
+.wave::after {
+    content: "";
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.8);
+    /* position 把左上角点位置相对于父元素大小进行移动，left：50% 就是左上角点在父元素水平中间，top:0 就是左上角点在父元素顶部 */
+    position: absolute;
+    left: 50%;
+    top: 0;
+    /* transform 相对于自己的位置进行调整，-50% 相对的是自己的长宽 */
+    transform: translate(-50%, -60%);
+    border-radius: 40%;
+    /* linear 线性动画 */
+    animation: wave 5s linear infinite;
+}
+
+.wave::before {
+    content: "water ball";
+    text-transform: uppercase;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    color: darkturquoise;
+    z-index: 2;
+    transform: translate(-50%, 100%);
+}
+
+
+@keyframes wave {
+    100% {
+        /* 要设置旋转的中心点 */
+        transform: translate(-50%, -60%) rotate(360deg);
+    }
+}

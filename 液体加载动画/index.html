@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>SVG 流体加载动画效果</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="loader">
+      <span style="--i: 1;"></span>
+      <span style="--i: 2;"></span>
+      <span style="--i: 3;"></span>
+      <span style="--i: 4;"></span>
+      <span style="--i: 5;"></span>
+      <span style="--i: 6;"></span>
+      <span style="--i: 7;"></span>
+    </div>
+    <svg>
+      <filter id="gooey">
+        <!-- 高斯模糊，由整个图像创建效果，模糊程度为10 -->
+        <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
+        <!-- 色彩矩阵，R|G|B|A|常亮偏移 * R|G|B|A -->
+        <feColorMatrix
+          values="
+        1 0 0 0 0
+        0 1 0 0 0
+        0 0 1 0 0
+        0 0 0 20 -10
+        "
+        />
+      </filter>
+    </svg>
+  </body>
+</html>
