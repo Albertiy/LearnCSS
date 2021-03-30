@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>标签组样式的单选按钮组</title>
+    <style>
+        :root {
+            --primary: #6d5dfc;
+            --white: #FFFFFF;
+            --greyLight-1: #E4EBF5;
+            --greyLight-2: #c8d0e7;
+            --greyDark: #9baacf;
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            background: var(--greyLight-1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .control {
+            width: 20.4rem;
+            height: 4rem;
+            border-radius: 1rem;
+            box-shadow: 0.3rem 0.3rem 0.6rem var(--greyLight-2), -0.2rem -0.2rem 0.5rem var(--white);
+            font-family: "Poppins", sans-serif;
+            background: var(--greyLight-1);
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .control input {
+            display: none;
+        }
+
+        .control label {
+            width: 6.8rem;
+            height: 3.6rem;
+            font-size: 1.4rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: var(--greyDark);
+            transition: all 0.5s ease;
+        }
+
+        .control label:hover {
+            color: var(--primary);
+        }
+
+        /* 选中control的input:checked子元素的下个邻接兄弟label元素 */
+        .control>input:checked+label {
+            color: var(--primary);
+
+            /* border-radius: ; */
+        }
+
+        .control__color {
+            position: absolute;
+            width: 6.2rem;
+            height: 3.4rem;
+            margin-left: 0.3rem;
+            border-radius: 0.8rem;
+            box-shadow: inset 0.2rem 0.2rem 0.5rem var(--greyLight-2),
+                inset -0.2rem -0.2rem 0.5rem var(--white);
+            pointer-events: none;
+            /* 使得虽然在上层，但不影响点击下面的元素*/
+            /* 1. 阻止用户的点击动作产生任何效果
+               2. 阻止缺省鼠标指针的显示
+               3. 阻止CSS中 hover 和 active 状态的变化触发事件
+               4. 阻止 JS 点击动作触发的事件
+            */
+        }
+
+        /* 这里无法合着写。除非用data？ */
+        #tab-1:checked~.control__color {
+            transform: translateX(0);
+            transition: transform 0.3s cubic-bezier(.645, .045, .355, 1);
+        }
+
+        #tab-2:checked~.control__color {
+            transform: translateX(6.8rem);
+            transition: transform 0.3s cubic-bezier(.645, .045, .355, 1);
+        }
+
+        #tab-3:checked~.control__color {
+            transform: translateX(13.6rem);
+            transition: transform 0.3s cubic-bezier(.645, .045, .355, 1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="control">
+            <input type="radio" id="tab-1" name="radio" class="" checked>
+            <label for="tab-1">Tab1</label>
+            <input type="radio" id="tab-2" name="radio" class="">
+            <label for="tab-2">Tab2</label>
+            <input type="radio" id="tab-3" name="radio" class="">
+            <label for="tab-3">Tab3</label>
+            <div class="control__color"></div>
+        </div>
+    </div>
+</body>
+
+</html>
