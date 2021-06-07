@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视差滚动Parallaxing</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            /* overflow: none; */
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: scroll;
+            perspective: 1px;
+            transform-origin: 0 0;
+        }
+
+        .parallax-container {
+            transform-style: preserve-3d;
+            width: 100%;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .parallax-child {
+            position: absolute;
+            z-index: -1;
+            transform-origin: center center;
+            transform: translateZ(-2px) scale(3);
+            width: 100%;
+            height: 200px;
+            background-image: url(./wallhaven-6oqzgq.jpg);
+        }
+
+        .normal-child {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="parallax-container">
+            <div class="parallax-child"></div>
+            <div class="normal-child">[ 滚 · 动 · 内 · 容 ]</div>
+        </div>
+        <div class="parallax-container">
+            <div class="parallax-child"></div>
+            <div class="normal-child">[ 滚 · 动 · 内 · 容 ]</div>
+        </div>
+        <div class="parallax-container">
+            <div class="parallax-child"></div>
+            <div class="normal-child">[ 滚 · 动 · 内 · 容 ]</div>
+        </div>
+        <div class="parallax-container">
+            <div class="parallax-child"></div>
+            <div class="normal-child">[ 滚 · 动 · 内 · 容 ]</div>
+        </div>
+    </div>
+</body>
+
+</html>
