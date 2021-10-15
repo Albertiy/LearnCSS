@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>呼吸灯</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #333;
+        }
+
+        .breathe-btn {
+            position: relative;
+            width: 100px;
+            height: 10px;
+            margin: 40px auto;
+            line-height: 40px;
+            border: 1px solid #2b92d4;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 20px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .3);
+            overflow: hidden;
+            /* Chrome 内核的渐变函数 */
+            /* background-image: -webkit-gradient(linear, left top, left bottom, from(#6cc3fe), to(#21a1d0)); */
+            background-image: linear-gradient(to bottom, #6cc3fe, #21a1d0);
+            animation-timing-function: ease-in-out;
+            animation-name: breathe;
+            animation-duration: 2700ms;
+            animation-iteration-count: infinite;
+            animation-direction: alternate;
+        }
+
+        @keyframes breathe {
+            0% {
+                opacity: .2;
+                box-shadow: 0 1px 2px rgba(255, 255, 255, 0.1);
+            }
+
+            100% {
+                opacity: 1;
+                border: 1px solid rgba(59, 235, 235, 1);
+                box-shadow: 0 1px 30px rgba(59, 255, 255, 1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="breathe-btn"></div>
+</body>
+
+</html>
