@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>条纹背景进度条</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            height: auto;
+            width: 450px;
+        }
+
+        .process_bar {
+            width: 100%;
+            height: 2rem;
+            background-color: bisque;
+            border-radius: 1rem;
+        }
+
+        .inner_bar {
+            height: inherit;
+            border-radius: inherit;
+            background: rgba(180, 160, 120, .2);
+        }
+
+        .progress_bg {
+            width: 60%;
+            height: inherit;
+            border-radius: inherit;
+            /* 说明：重复渐变，右下到左上45度， */
+            background: repeating-linear-gradient(-45deg, #D9CFBB 25%, #C3B393 0, #C3B393 50%, #D9CFBB 0, #D9CFBB 75%, #C3B393 0);
+            /* 覆盖式，每个颜色一层一层叠加 */
+            /* 调整背景图像大小（默认背景图片以wrap方式重复） */
+            background-size: 16px 16px;
+            animation: panoramic 20s linear infinite;
+        }
+
+        /* 注：panoramic 全景的 */
+        @keyframes panoramic {
+            to {
+                background-position: 200% 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="process_bar">
+            <div class="inner_bar">
+                <div class="progress_bg"></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
