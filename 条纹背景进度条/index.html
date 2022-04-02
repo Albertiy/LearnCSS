@@ -17,11 +17,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
+            row-gap: 3rem;
         }
 
         .container {
             height: auto;
             width: 450px;
+            display: flex;
+            justify-content: center;
         }
 
         .process_bar {
@@ -55,16 +59,34 @@
                 background-position: 200% 0;
             }
         }
+
+        .coupon-card {
+            width: 200px;
+            height: 120px;
+            background-image: radial-gradient(circle at 100px -8px, transparent 20px, #b4a078 21px);
+        }
+
+        .coupon-card:hover {
+            /* box-shadow:
+                3.3px 3.3px 16.9px rgba(0, 0, 0, 0.111),
+                4px 4px 12px rgba(0, 0, 0, 0.24); */
+            filter: drop-shadow(3.3px 3.3px 16.9px rgba(0, 0, 0, 0.111), 4px 4px 10px rgba(0, 0, 0, 0.24));
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
+        <!-- 动态条纹进度条 -->
         <div class="process_bar">
             <div class="inner_bar">
                 <div class="progress_bg"></div>
             </div>
         </div>
+    </div>
+    <div class="container">
+        <!-- 圆弧缺口卡片效果 -->
+        <div class="coupon-card"></div>
     </div>
 </body>
 
