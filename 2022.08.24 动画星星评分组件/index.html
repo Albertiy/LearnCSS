@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动画星星评分组件</title>
+    <style>
+        * {
+            border: 0;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --hue: 223;
+            --starHue: 38;
+            --bg: hsl(var(--hue), 10%, 90%);
+            --fg: hsl(var(--hue), 10%, 10%);
+            --primary: hsl(var(--hue), 90%, 55%);
+            --yellow: hsl(var(--starHue), 90%, 55%);
+            --yellow-t: hsla(var(--starHue), 90%, 55%, 0);
+            --bezier: cubic-bezier(0.42, 0, 0.58, 1);
+            --trans-dur: 0.3s;
+            font-size: calc(24px + (30 - 24) * (100vw -320px) / (1280 320));
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--fg);
+            font: 1em/0.5 "DM Sans", sans-serif;
+            display: flex;
+            height: 100vh;
+            transition: background-color var(--trans-dur), color var(--trans-dur);
+        }
+
+        .rating {
+            margin: auto;
+        }
+
+        .rating__display {
+            font-size: 1em;
+            font-weight: 500;
+            min-height: 1.25em;
+            position: absolute;
+            top: 100%;
+            width: 100%;
+            text-align: center;
+        }
+
+        .rating__stars {
+            display: flex;
+            padding-bottom: 0.375em;
+            position: relative;
+        }
+
+        .rating__star {
+            display: block;
+            overflow: visible;
+            pointer-events: none;
+            width: 2em;
+            height: 2em;
+        }
+
+        .rating__star-ring,
+        .rating__star-fill,
+        .rating__star-line,
+        .rating__star-stroke {
+            animation-duration: 1s;
+            animation-timing-function: ease-in-out;
+            animation-fill-mode: forwards;
+        }
+
+        /* 圆环、四周线、实心星星的轮廓色 */
+        .rating__star-ring,
+        .rating__star-fill,
+        .rating__star-line {
+            stroke: var(--yellow);
+        }
+
+        .rating__star-fill {
+            /* 实心星星的填充色 */
+            fill: var(--yellow);
+            /* 实心星星默认缩小到看不见 */
+            transform: scale(0);
+            transition: fill var(--trans-dur) var(--bezier), transform var(--trans-dur) var(--bezier);
+        }
+
+        .rating__star-stroke {
+            /* 灰色的空心星星轮廓 */
+            stroke: hsl(var(--hue), 10%, 80%);
+            transition: stroke var(--trans-dur);
+        }
+
+        .rating__label {
+            cursor: pointer;
+            padding: 0.125em;
+        }
+
+        /* 需要循环，但是没法循环。为啥不用 data 呢？因为这个类是动态添加且目标元素不固定的 */
+        .rating__label--delay1 .rating__star-ring,
+        .rating__label--delay1 .rating__star-fill,
+        .rating__label--delay1 .rating__star-line,
+        .rating__label--delay1 .rating__star-stroke {
+            animation-delay: calc(0.05s * 1);
+        }
+
+        .rating__label--delay2 .rating__star-ring,
+        .rating__label--delay2 .rating__star-fill,
+        .rating__label--delay2 .rating__star-line,
+        .rating__label--delay2 .rating__star-stroke {
+            animation-delay: calc(0.05s * 2);
+        }
+
+        .rating__label--delay3 .rating__star-ring,
+        .rating__label--delay3 .rating__star-fill,
+        .rating__label--delay3 .rating__star-line,
+        .rating__label--delay3 .rating__star-stroke {
+            animation-delay: calc(0.05s * 3);
+        }
+
+        .rating__label--delay4 .rating__star-ring,
+        .rating__label--delay4 .rating__star-fill,
+        .rating__label--delay4 .rating__star-line,
+        .rating__label--delay4 .rating__star-stroke {
+            animation-delay: calc(0.05s * 4);
+        }
+
+        .rating__input {
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        /* display */
+        /*
+        [] : 属性选择器
+        ~ : 兄弟元素选择器
+        :not(selector) : 伪类，选择除 selector 之外的元素
+        :first-of-type : 匹配兄弟元素中第一个某种类型的元素
+        :nth-of-type : 按照 an + b 模式匹配 一列兄弟元素中的元素
+        */
+        .rating__input:hover~[data-rating]:not([hidden]) {
+            display: none;
+        }
+
+        .rating__input-1:hover~[data-rating="1"][hidden],
+        .rating__input-2:hover~[data-rating="2"][hidden],
+        .rating__input-3:hover~[data-rating="3"][hidden],
+        .rating__input-4:hover~[data-rating="4"][hidden],
+        .rating__input-5:hover~[data-rating="5"][hidden],
+        .rating__input:checked:hover~[data-rating]:not([hidden]) {
+            display: block;
+        }
+
+        /* stars */
+        .rating__input-1:hover~.rating__label:first-of-type .rating__star-stroke,
+        .rating__input-2:hover~.rating__label:nth-of-type(-n + 2) .rating__star-stroke,
+        .rating__input-3:hover~.rating__label:nth-of-type(-n + 3) .rating__star-stroke,
+        .rating__input-4:hover~.rating__label:nth-of-type(-n + 4) .rating__star-stroke,
+        .rating__input-5:hover~.rating__label:nth-of-type(-n + 5) .rating__star-stroke {
+            stroke: var(--yellow);
+            transform: scale(1);
+        }
+
+        .rating__input-1:checked~.rating__label:first-of-type .rating__star-ring,
+        .rating__input-2:checked~.rating__label:nth-of-type(-n + 2) .rating__star-ring,
+        .rating__input-3:checked~.rating__label:nth-of-type(-n + 3) .rating__star-ring,
+        .rating__input-4:checked~.rating__label:nth-of-type(-n + 4) .rating__star-ring,
+        .rating__input-5:checked~.rating__label:nth-of-type(-n + 5) .rating__star-ring {
+            animation-name: starRing;
+        }
+
+        .rating__input-1:checked~.rating__label:first-of-type .rating__star-stroke,
+        .rating__input-2:checked~.rating__label:nth-of-type(-n + 2) .rating__star-stroke,
+        .rating__input-3:checked~.rating__label:nth-of-type(-n + 3) .rating__star-stroke,
+        .rating__input-4:checked~.rating__label:nth-of-type(-n + 4) .rating__star-stroke,
+        .rating__input-5:checked~.rating__label:nth-of-type(-n + 5) .rating__star-stroke {
+            animation-name: starStroke;
+        }
+
+        .rating__input-1:checked~.rating__label:first-of-type .rating__star-line,
+        .rating__input-2:checked~.rating__label:nth-of-type(-n + 2) .rating__star-line,
+        .rating__input-3:checked~.rating__label:nth-of-type(-n + 3) .rating__star-line,
+        .rating__input-4:checked~.rating__label:nth-of-type(-n + 4) .rating__star-line,
+        .rating__input-5:checked~.rating__label:nth-of-type(-n + 5) .rating__star-line {
+            animation-name: starLine;
+        }
+
+        .rating__input-1:checked~.rating__label:first-of-type .rating__star-fill,
+        .rating__input-2:checked~.rating__label:nth-of-type(-n + 2) .rating__star-fill,
+        .rating__input-3:checked~.rating__label:nth-of-type(-n + 3) .rating__star-fill,
+        .rating__input-4:checked~.rating__label:nth-of-type(-n + 4) .rating__star-fill,
+        .rating__input-5:checked~.rating__label:nth-of-type(-n + 5) .rating__star-fill {
+            animation-name: starFill;
+        }
+
+        .rating__input-1:not(:checked):hover~.rating__label:first-of-type .rating__star-fill,
+        .rating__input-2:not(:checked):hover~.rating__label:nth-of-type(2) .rating__star-fill,
+        .rating__input-3:not(:checked):hover~.rating__label:nth-of-type(3) .rating__star-fill,
+        .rating__input-4:not(:checked):hover~.rating__label:nth-of-type(4) .rating__star-fill,
+        .rating__input-5:not(:checked):hover~.rating__label:nth-of-type(5) .rating__star-fill {
+            fill: var(--yellow-t);
+        }
+
+        /* screen reader text */
+        .rating__sr {
+            clip: rect(1px, 1px, 1px, 1px);
+            overflow: hidden;
+            position: absolute;
+            width: 1px;
+            height: 1px;
+        }
+
+        /* Dark theme */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: hsl(var(--hue), 10%, 10%);
+                --fg: hsl(var(--hue), 10%, 90%);
+            }
+
+            .rating {
+                margin: auto;
+            }
+
+            .rating__star-stroke {
+                stroke: hsl(var(--hue), 10%, 30%);
+            }
+        }
+
+        /* Animations */
+        @keyframes starRing {
+
+            from,
+            20% {
+                animation-timing-function: ease-in;
+                opacity: 1;
+                r: 8px;
+                stroke-width: 16px;
+                transform: scale(0);
+            }
+
+            35% {
+                animation-timing-function: ease-out;
+                opacity: 0.5;
+                r: 8px;
+                stroke-width: 16px;
+                transform: sacle(1);
+            }
+
+            50%,
+            to {
+                opacity: 0;
+                r: 16px;
+                stroke-width: 0;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes starFill {
+
+            from,
+            40% {
+                animation-timing-function: ease-out;
+                transform: scale(0);
+            }
+
+            60% {
+                animation-timing-function: ease-in-out;
+                transform: scale(1.2);
+            }
+
+            80% {
+                transform: scale(0.9);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes starStroke {
+            from {
+                transform: scale(1);
+            }
+
+            20%,
+            to {
+                transform: scale(0);
+            }
+        }
+
+        @keyframes starLine {
+
+            from,
+            40% {
+                animation-timing-function: ease-out;
+                stroke-dasharray: 1 23;
+                stroke-dashoffset: 1;
+            }
+
+            60%,
+            to {
+                stroke-dasharray: 12 12;
+                stroke-dashoffset: -12;
+            }
+        }
+    </style>
+
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            const starRating = new StarRating("form");
+        })
+
+        class StarRating {
+            constructor(qs) {
+                // 评分值的数组，包含 id（默认为0）和 name 属性。
+                this.ratings = [
+                    { id: 1, name: "Terrible" },
+                    { id: 2, name: "Bad" },
+                    { id: 3, name: "OK" },
+                    { id: 4, name: "Good" },
+                    { id: 5, name: "Excellent" }
+                ];
+                /** @type{{id:number, name:string}} 值为 ratings 中的元素 */
+                this.rating = null;
+                /** @type{HTMLFormElement} 对应的表单元素 */
+                this.el = document.querySelector(qs);
+
+                this.init();
+            }
+
+            /** 初始化函数 */
+            init() {
+                // 给表单绑定change事件
+                this.el?.addEventListener("change", this.updateRating.bind(this));
+
+                try {
+                    this.el?.reset();   // 表单重置
+                } catch (err) {
+                    console.error("Element isn't a form.")
+                }
+            }
+
+            /** change事件处理函数，更新分值
+                @param {Event} e 事件
+             */
+            updateRating(e) {
+                // 清除动画延迟
+                // 给 label 的 CSS类名都设为 rating__label
+                Array.from(this.el.querySelectorAll(`[for*="rating"]`)).forEach(el => {
+                    el.className = "rating__label";
+                });
+                console.log(e.target.value)
+                const ratingObject = this.ratings.find(r => r.id === +e.target.value);
+                const prevRatingID = this.rating?.id || 0;
+
+                let delay = 0;
+                this.rating = ratingObject;
+                this.ratings.forEach(rating => {
+                    const { id } = rating;
+
+                    // 添加延迟
+                    const ratingLabel = this.el.querySelector(`[for="rating-${id}"]`);
+                    // 只给从前一个已经选中的星星的下一个到当前选择的星星加延迟
+                    if (id > prevRatingID + 1 && id <= this.rating.id) {
+                        ++delay;
+                        ratingLabel.classList.add(`rating__label--delay${delay}`);
+                    }
+
+                    // 隐藏评分
+                    const ratingTextEl = this.el.querySelector(`[data-rating="${id}"]`);
+
+                    if (this.rating.id !== id)
+                        ratingTextEl.setAttribute("hidden", true);
+                    else
+                        ratingTextEl.removeAttribute("hidden");
+                })
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <!-- 教程：https://codepen.io/jkantner/pen/BarvVNa -->
+    <form class="rating">
+        <div class="rating__stars">
+            <input type="radio" id="rating-1" class="rating__input rating__input-1" name="rating" value="1">
+            <input type="radio" id="rating-2" class="rating__input rating__input-2" name="rating" value="2">
+            <input type="radio" id="rating-3" class="rating__input rating__input-3" name="rating" value="3">
+            <input type="radio" id="rating-4" class="rating__input rating__input-4" name="rating" value="4">
+            <input type="radio" id="rating-5" class="rating__input rating__input-5" name="rating" value="5">
+            <label for="rating-1" class="rating__label">
+                <!-- 星星SVG，本身是没有动画的。只有 -->
+                <svg class="rating__star" width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
+                    <!-- 一个圆 -->
+                    <g transform="translate(16,16)">
+                        <circle class="rating__star-ring" fill="none" stroke="#000" stroke-width="16" r="8"
+                            transform="scale(0)" />
+                    </g>
+                    <!-- 星星主体，包含轮廓和填充 -->
+                    <g stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <g transform="translate(16,16) rotate(180)">
+                            <polygon class="rating__star-stroke"
+                                points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07"
+                                fill="none" />
+                            <polygon class="rating__star-fill"
+                                points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07"
+                                fill="#000" />
+                        </g>
+                        <!-- 四周的点 -->
+                        <g transform="translate(16,16)" stroke-dasharray="12 12" stroke-dashoffset="12">
+                            <polyline class="rating__star-line" transform="rotate(0)" points="0 4,0 16" />
+                            <polyline class="rating__star-line" transform="rotate(72)" points="0 4,0 16" />
+                            <polyline class="rating__star-line" transform="rotate(144)" points="0 4,0 16" />
+                            <polyline class="rating__star-line" transform="rotate(216)" points="0 4,0 16" />
+                            <polyline class="rating__star-line" transform="rotate(288)" points="0 4,0 16" />
+                        </g>
+                    </g>
+                </svg>
+                <span class="rating__sr">1 star—Terrible</span>
+            </label>
+            <label for="rating-2" class="rating__label">
+                <svg class="rating__star" width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
+                    <!-- 一个圆 -->
+                    <g transform="translate(16,16)">
+                        <circle class="rating__star-ring" fill="none" stroke="#000" stroke-width="16" r="8"
+                            transform="scale(0)" />
+                    </g>
+                    <!-- 星星主体，包含轮廓和填充 -->
+                    <g stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <g transform="translate(16,16) rotate(180)">
+                            <polygon class="rating__star-stroke"
+                                points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07"
+                                fill="none" />
+                            <polygon class="rating__star-fill"
+                                points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07"
+                                fill="#000" />
+                        </g>
+                        <!-- 四周的点 -->
+                        <g transform="translate(16,16)" stroke-dasharray="12 12" stroke-dashoffset="12">
+                            <polyline class="rating__star-line" transform="rotate(0)" points="0 4,0 16" />
+                            <polyline class="rating__star-line" transform="rotate(72)" points="0 4,0 16" />
+                            <polyline class="rating__star-line" transform="rotate(144)" points="0 4,0 16" />
+                            <polyline class="rating__star-line" transform="rotate(216)" points="0 4,0 16" />
+                            <polyline class="rating__star-line" transform="rotate(288)" points="0 4,0 16" />
+                        </g>
+                    </g>
+                </svg>
+                <span class="rating__sr">2 stars—Bad</span>
+            </label>
+            <label for="rating-3" class="rating__label">
+                <svg class="rating__star" width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
+                    <!-- 一个圆 -->
+                    <g transform="translate(16,16)">
+                        <circle class="rating__star-ring" fill="none" stroke="#000" stroke-width="16" r="8"
+                            transform="scale(0)" />
+                    </g>
+                    <!-- 星星主体，包含轮廓和填充 -->
+                    <g stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <g transform="translate(16,16) rotate(180)">
+                            <polygon class="rating__star-stroke"
+                                points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07"
+                                fill="none" />
+                            <polygon class="rating__star-fill"
+                                points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07"
+                                fill="#000" />
+                        </g>
+                        <!-- 四周的点 -->
+                        <g transform="translate(16,16)" stroke-dasharray="12 12" stroke-dashoffset="12">
+                            <polyline class="rating__star-line" transform="rotate(0)" points="0 4,0 16" />
+                            <polyline class="rating__star-line" transform="rotate(72)" points="0 4,0 16" />
+                            <polyline class="rating__star-line" transform="rotate(144)" points="0 4,0 16" />
+                            <polyline class="rating__star-line" transform="rotate(216)" points="0 4,0 16" />
+                            <polyline class="rating__star-line" transform="rotate(288)" points="0 4,0 16" />
+                        </g>
+                    </g>
+                </svg>
+                <span class="rating__sr">3 stars—OK</span>
+            </label>
+            <label for="rating-4" class="rating__label">
+                <svg class="rating__star" width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
+                    <!-- 一个圆 -->
+                    <g transform="translate(16,16)">
+                        <circle class="rating__star-ring" fill="none" stroke="#000" stroke-width="16" r="8"
+                            transform="scale(0)" />
+                    </g>
+                    <!-- 星星主体，包含轮廓和填充 -->
+                    <g stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <g transform="translate(16,16) rotate(180)">
+                            <polygon class="rating__star-stroke"
+                                points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07"
+                                fill="none" />
+                            <polygon class="rating__star-fill"
+                                points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07"
+                                fill="#000" />
+                        </g>
+                        <!-- 四周的点 -->
+                        <g transform="translate(16,16)" stroke-dasharray="12 12" stroke-dashoffset="12">
+                            <polyline class="rating__star-line" transform="rotate(0)" points="0 4,0 16" />
+                            <polyline class="rating__star-line" transform="rotate(72)" points="0 4,0 16" />
+                            <polyline class="rating__star-line" transform="rotate(144)" points="0 4,0 16" />
+                            <polyline class="rating__star-line" transform="rotate(216)" points="0 4,0 16" />
+                            <polyline class="rating__star-line" transform="rotate(288)" points="0 4,0 16" />
+                        </g>
+                    </g>
+                </svg>
+                <span class="rating__sr">4 stars—Good</span>
+            </label>
+            <label for="rating-5" class="rating__label">
+                <svg class="rating__star" width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
+                    <!-- 一个圆 -->
+                    <g transform="translate(16,16)">
+                        <circle class="rating__star-ring" fill="none" stroke="#000" stroke-width="16" r="8"
+                            transform="scale(0)" />
+                    </g>
+                    <!-- 星星主体，包含轮廓和填充 -->
+                    <g stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <g transform="translate(16,16) rotate(180)">
+                            <polygon class="rating__star-stroke"
+                                points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07"
+                                fill="none" />
+                            <polygon class="rating__star-fill"
+                                points="0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07"
+                                fill="#000" />
+                        </g>
+                        <!-- 四周的点 -->
+                        <g transform="translate(16,16)" stroke-dasharray="12 12" stroke-dashoffset="12">
+                            <polyline class="rating__star-line" transform="rotate(0)" points="0 4,0 16" />
+                            <polyline class="rating__star-line" transform="rotate(72)" points="0 4,0 16" />
+                            <polyline class="rating__star-line" transform="rotate(144)" points="0 4,0 16" />
+                            <polyline class="rating__star-line" transform="rotate(216)" points="0 4,0 16" />
+                            <polyline class="rating__star-line" transform="rotate(288)" points="0 4,0 16" />
+                        </g>
+                    </g>
+                </svg>
+                <span class="rating__sr">5 stars—Excellent</span>
+            </label>
+            <p class="rating__display" data-rating="1" hidden>Terrible</p>
+            <p class="rating__display" data-rating="2" hidden>Bad</p>
+            <p class="rating__display" data-rating="3" hidden>OK</p>
+            <p class="rating__display" data-rating="4" hidden>Good</p>
+            <p class="rating__display" data-rating="5" hidden>Excellent</p>
+        </div>
+    </form>
+</body>
+
+</html>
